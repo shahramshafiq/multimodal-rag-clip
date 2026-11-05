@@ -6,7 +6,7 @@ from multimodal_rag.chunking import chunk_blocks
 from multimodal_rag.config import settings, setup_logging
 from multimodal_rag.embeddings import ClipEmbedder
 from multimodal_rag.extract import extract_pdf
-from multimodal_rag.store import save_index
+from multimodal_rag.store import page_key, save_index
 
 log = logging.getLogger("ingest")
 
@@ -19,11 +19,14 @@ def main():
         return 1
 
     embedder = ClipEmbedder(settings.clip_model)
-    all_chunks, all_figures = [], []
+    all_chunks, all_figures, pages = [], [], {}
     for pdf in pdfs:
         blocks, figures = extract_pdf(pdf, settings)
         all_chunks += chunk_blocks(blocks, embedder.count_tokens, settings.chunk_max_tokens)
         all_figures += figures
+        for block in blocks:
+            key = page_key(block.doc, block.page)
+            pages[key] = f"{pages[key]}\n{block.text}" if key in pages else block.text
 
     too_long = [c.chunk_id for c in all_chunks if embedder.count_tokens(c.text) > 77]
     if too_long:
@@ -36,8 +39,8 @@ def main():
     text_vectors = embedder.embed_texts([c.text for c in all_chunks])
     image_vectors = embedder.embed_images([f.image_path for f in all_figures])
     caption_vectors = embedder.embed_texts([f.caption for f in all_figures])
-    save_index(settings.index_dir, all_chunks, all_figures, text_vectors, image_vectors, caption_vectors)
-    log.info("index saved: %d text chunks, %d figures", len(all_chunks), len(all_figures))
+    save_index(settings.index_dir, all_chunks, all_figures, pages, text_vectors, image_vectors, caption_vectors)
+    log.info("index saved: %d text chunks, %d pages, %d figures", len(all_chunks), len(pages), len(all_figures))
     return 0
 
 
