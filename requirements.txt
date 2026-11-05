@@ -1,0 +1,8 @@
+numpy==2.5.4
+openai==3.46.0
+pillow==13.0.0
+pymupdf==2.1
+pytest==9.2.0
+python-dotenv==1.2.4
+torch==2.15.0+cpu
+transformers==5.22.1
