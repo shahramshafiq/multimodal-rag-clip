@@ -1,0 +1,32 @@
+[
+  {"id": "text_01", "type": "text", "question": "What was the average monthly Arctic sea ice extent in September 2020?", "doc": "noaa_sea_ice_2020", "pages": [2], "must_include": ["3.92"]},
+  {"id": "text_02", "type": "text", "question": "On what date was the annual minimum Arctic sea ice extent reached in 2020?", "doc": "noaa_sea_ice_2020", "pages": [2], "must_include": ["15 September|September 15"]},
+  {"id": "text_03", "type": "text", "question": "What was the annual maximum sea ice extent reached on 5 March 2020?", "doc": "noaa_sea_ice_2020", "pages": [4], "must_include": ["15.05"]},
+  {"id": "text_04", "type": "text", "question": "In 1985, what percentage of the ice pack was very old ice, older than 4 years?", "doc": "noaa_sea_ice_2020", "pages": [5], "must_include": ["33"]},
+  {"id": "text_05", "type": "text", "question": "What was the average minimum sea ice extent for the period 2007-2020?", "doc": "noaa_sea_ice_2020", "pages": [5], "must_include": ["4.44"]},
+  {"id": "text_06", "type": "text", "question": "What was the mean sea ice thickness from ICESat-2 in April 2020?", "doc": "noaa_sea_ice_2020", "pages": [8], "must_include": ["2.1"]},
+  {"id": "text_07", "type": "text", "question": "What range of sea ice thicknesses was measured in western Fram Strait in August and September 2020?", "doc": "noaa_sea_ice_2020", "pages": [9], "must_include": ["1.06", "3.43"]},
+  {"id": "text_08", "type": "text", "question": "What percentage of U.S. children ever had Long COVID in 2022?", "doc": "cdc_long_covid_children_2022", "pages": [1, 4], "must_include": ["1.3"]},
+  {"id": "text_09", "type": "text", "question": "How long must symptoms last after COVID-19 to count as Long COVID in this report?", "doc": "cdc_long_covid_children_2022", "pages": [1, 2, 3, 4], "must_include": ["3 months|three months"]},
+  {"id": "text_10", "type": "text", "question": "How many children were in the 2022 National Health Interview Survey Sample Child interview?", "doc": "cdc_long_covid_children_2022", "pages": [4], "must_include": ["7,464|7464"]},
+  {"id": "text_11", "type": "text", "question": "As of December 2022, what percentage of children had antibodies indicating a previous COVID-19 infection?", "doc": "cdc_long_covid_children_2022", "pages": [4], "must_include": ["91.9"]},
+  {"id": "text_12", "type": "text", "question": "What percentage of Sample Child interviews were conducted at least partially by telephone in 2022?", "doc": "cdc_long_covid_children_2022", "pages": [4], "must_include": ["56.1"]},
+
+  {"id": "figure_01", "type": "figure", "question": "In the line chart of monthly sea ice extent, in which year does the September line reach its lowest point?", "doc": "noaa_sea_ice_2020", "figure": "noaa_sea_ice_2020_fig2", "must_include": ["2012"]},
+  {"id": "figure_02", "type": "figure", "question": "In the line chart of monthly sea ice extent, which month's line is higher around 1980, March or September?", "doc": "noaa_sea_ice_2020", "figure": "noaa_sea_ice_2020_fig2", "must_include": ["September"]},
+  {"id": "figure_03", "type": "figure", "question": "On the maps of March and September 2020 sea ice extent, what color marks the median ice edge for 1981-2010?", "doc": "noaa_sea_ice_2020", "figure": "noaa_sea_ice_2020_fig1", "must_include": ["pink|magenta"]},
+  {"id": "figure_04", "type": "figure", "question": "In the chart of sea ice age percentages, which age group makes up the largest share of the ice in 2020?", "doc": "noaa_sea_ice_2020", "figure": "noaa_sea_ice_2020_fig3", "must_include": ["0-1|0 to 1"]},
+  {"id": "figure_05", "type": "figure", "question": "On the sea ice age maps, what color does the legend use for ice that is 4 or more years old?", "doc": "noaa_sea_ice_2020", "figure": "noaa_sea_ice_2020_fig3", "must_include": ["red"]},
+  {"id": "figure_06", "type": "figure", "question": "On the map of sea ice thickness for April 2020, what is the highest value on the color scale, in meters?", "doc": "noaa_sea_ice_2020", "figure": "noaa_sea_ice_2020_fig5", "must_include": ["5"]},
+  {"id": "figure_07", "type": "figure", "question": "On the map of sea ice thickness anomaly for April 2020, what is the largest value shown on the color scale, in meters?", "doc": "noaa_sea_ice_2020", "figure": "noaa_sea_ice_2020_fig5", "must_include": ["1.5"]},
+  {"id": "figure_08", "type": "figure", "question": "In the chart of monthly sea ice thickness from ICESat-2, which winter's line is higher in April, winter 18-19 or winter 19-20?", "doc": "noaa_sea_ice_2020", "figure": "noaa_sea_ice_2020_fig4", "must_include": ["18-19|2018-19|2018/19|2018-2019"]},
+  {"id": "figure_09", "type": "figure", "question": "In the Long COVID bar chart by sex, what color is the bar for boys?", "doc": "cdc_long_covid_children_2022", "figure": "cdc_long_covid_children_2022_fig1", "must_include": ["green"]},
+  {"id": "figure_10", "type": "figure", "question": "In the Long COVID bar chart by age group, what is the highest value on the Percent axis?", "doc": "cdc_long_covid_children_2022", "figure": "cdc_long_covid_children_2022_fig2", "must_include": ["3"]},
+  {"id": "figure_11", "type": "figure", "question": "In the Long COVID bar chart by race and Hispanic origin, what percentage of Hispanic children currently have Long COVID?", "doc": "cdc_long_covid_children_2022", "figure": "cdc_long_covid_children_2022_fig3", "must_include": ["0.5"]},
+  {"id": "figure_12", "type": "figure", "question": "In the Long COVID bar chart by race and Hispanic origin, which group has an asterisk instead of a bar for current Long COVID?", "doc": "cdc_long_covid_children_2022", "figure": "cdc_long_covid_children_2022_fig3", "must_include": ["Asian"]},
+
+  {"id": "none_01", "type": "none", "question": "How many polar bears live in the Arctic?"},
+  {"id": "none_02", "type": "none", "question": "What percentage of adults in Canada have Long COVID?"},
+  {"id": "none_03", "type": "none", "question": "How much did Antarctic sea ice extent change in 2020?"},
+  {"id": "none_04", "type": "none", "question": "Who won the 2022 FIFA World Cup?"}
+]
