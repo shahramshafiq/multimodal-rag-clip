@@ -30,10 +30,10 @@ def _image_as_data_url(path):
 
 
 def build_content(question, retrieved, detail):
-    """The user message: the question, then the passages, then each figure with its caption."""
+    """The user message: the question, then the pages, then each figure with its caption."""
     content = [{"type": "input_text", "text": f"Question: {question}\n\nText passages:"}]
-    for chunk in retrieved.chunks:
-        content.append({"type": "input_text", "text": f"[{chunk['doc']}, page {chunk['page']}] {chunk['text']}"})
+    for page in retrieved.pages:
+        content.append({"type": "input_text", "text": f"[{page['doc']}, page {page['page']}] {page['text']}"})
     for figure in retrieved.figures:
         label = f"[{figure['doc']}, Figure {figure['number']}, page {figure['page']}] {figure['caption']}"
         content.append({"type": "input_text", "text": label})
