@@ -40,6 +40,15 @@ def retrieval_hit_rank(item, found):
     return None
 
 
+def answer_chunk_rank(item, found):
+    """A stricter check for text questions: where is the chunk that really holds the answer?"""
+    if item["type"] == "text":
+        for rank, chunk in enumerate(found.chunks, start=1):
+            if all(term_found(term, chunk["text"]) for term in item["must_include"]):
+                return rank
+    return None
+
+
 def evaluate_retrieval(golden, index, embedder, max_k_text, max_k_figures, use_captions):
     """Each question's rank of the expected source, searched with the largest k so smaller k can be read from it."""
     rows = []
@@ -47,14 +56,15 @@ def evaluate_retrieval(golden, index, embedder, max_k_text, max_k_figures, use_c
         if item["type"] == "none":
             continue
         found = retrieve(item["question"], index, embedder, max_k_text, max_k_figures, use_captions)
-        rows.append({"id": item["id"], "type": item["type"], "rank": retrieval_hit_rank(item, found)})
+        rows.append({"id": item["id"], "type": item["type"], "rank": retrieval_hit_rank(item, found),
+                     "answer_chunk_rank": answer_chunk_rank(item, found)})
     return rows
 
 
-def hit_rate(rows, kind, k):
+def hit_rate(rows, kind, k, field="rank"):
     """Share of questions of this kind whose expected source is in the top k."""
     selected = [row for row in rows if row["type"] == kind]
-    hits = [row for row in selected if row["rank"] is not None and row["rank"] <= k]
+    hits = [row for row in selected if row[field] is not None and row[field] <= k]
     return len(hits), len(selected)
 
 
