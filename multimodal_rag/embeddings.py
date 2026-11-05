@@ -5,10 +5,12 @@ import numpy as np
 import torch
 from PIL import Image
 from transformers import CLIPModel, CLIPProcessor
+from transformers.utils import logging as transformers_logging
 
 log = logging.getLogger("embeddings")
 
-CLIP_SPECIAL_TOKENS = 2  # the start and end tokens CLIP adds to every text
+# count_tokens measures long sentences on purpose, so the "longer than 77" warning is only noise here
+transformers_logging.set_verbosity_error()
 
 
 class ClipEmbedder:
