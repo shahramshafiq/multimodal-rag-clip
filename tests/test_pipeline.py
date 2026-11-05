@@ -101,6 +101,9 @@ def test_answer_scoring():
     assert answer_is_correct({"type": "text", "must_include": ["1.06", "3.43"]}, "from 1.06 to 3.43 m", "none")
     assert not answer_is_correct({"type": "text", "must_include": ["1.06", "3.43"]}, "about 1.06 m", "none")
     assert answer_is_correct({"type": "none"}, "I could not find this.", "I could not find this.")
+    # the 5 in a source is not the answer
+    assert not answer_is_correct({"type": "figure", "must_include": ["5"]}, "It is 4 meters. [doc, Figure 5, page 5]", "none")
+    assert not answer_is_correct({"type": "figure", "must_include": ["5"]}, "Figure 5 shows 4 meters.", "none")
 
 
 def test_retrieval_rank_and_hit_rate():
