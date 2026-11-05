@@ -80,7 +80,7 @@ def test_figures_get_their_own_list_even_when_text_scores_are_higher():
 def test_chunks_search_but_the_model_gets_each_whole_page_once():
     index = make_index()
     index.chunks[0]["page"] = 2  # both chunks now come from one page
-    found = retrieve("question", index, FakeEmbedder(), 2, 1, use_captions=False)
+    found = replace(retrieve("question", index, FakeEmbedder(), 2, 1, use_captions=False), figures=[])
     assert found.pages == [{"doc": "d", "page": 2, "text": "page two"}]
     assert "page two" in build_content("question", found, "high")[1]["text"]
 
