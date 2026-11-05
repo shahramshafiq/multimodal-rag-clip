@@ -1,0 +1,860 @@
+{
+  "retrieval": {
+    "image only": [
+      {
+        "id": "text_01",
+        "type": "text",
+        "rank": 2,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "text_02",
+        "type": "text",
+        "rank": 3,
+        "answer_chunk_rank": 3
+      },
+      {
+        "id": "text_03",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "text_04",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "text_05",
+        "type": "text",
+        "rank": 6,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "text_06",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "text_07",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "text_08",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 8
+      },
+      {
+        "id": "text_09",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "text_10",
+        "type": "text",
+        "rank": 5,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "text_11",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "text_12",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "figure_01",
+        "type": "figure",
+        "rank": 2,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_02",
+        "type": "figure",
+        "rank": 2,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_03",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_04",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_05",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_06",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_07",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_08",
+        "type": "figure",
+        "rank": null,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_09",
+        "type": "figure",
+        "rank": 2,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_10",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_11",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_12",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      }
+    ],
+    "image and caption": [
+      {
+        "id": "text_01",
+        "type": "text",
+        "rank": 2,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "text_02",
+        "type": "text",
+        "rank": 3,
+        "answer_chunk_rank": 3
+      },
+      {
+        "id": "text_03",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "text_04",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "text_05",
+        "type": "text",
+        "rank": 6,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "text_06",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "text_07",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "text_08",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 8
+      },
+      {
+        "id": "text_09",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "text_10",
+        "type": "text",
+        "rank": 5,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "text_11",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "text_12",
+        "type": "text",
+        "rank": 1,
+        "answer_chunk_rank": 1
+      },
+      {
+        "id": "figure_01",
+        "type": "figure",
+        "rank": 2,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_02",
+        "type": "figure",
+        "rank": 2,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_03",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_04",
+        "type": "figure",
+        "rank": null,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_05",
+        "type": "figure",
+        "rank": null,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_06",
+        "type": "figure",
+        "rank": 2,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_07",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_08",
+        "type": "figure",
+        "rank": 3,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_09",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_10",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_11",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      },
+      {
+        "id": "figure_12",
+        "type": "figure",
+        "rank": 1,
+        "answer_chunk_rank": null
+      }
+    ]
+  },
+  "multimodal": [
+    {
+      "id": "text_01",
+      "type": "text",
+      "question": "What was the average monthly Arctic sea ice extent in September 2020?",
+      "answer": "The average monthly Arctic sea ice extent in September 2020 was 3.92 million km\u00b2. This was the second-lowest monthly extent in the 42-year satellite record [noaa_sea_ice_2020, page 2].",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 4856,
+      "output_tokens": 52
+    },
+    {
+      "id": "text_02",
+      "type": "text",
+      "question": "On what date was the annual minimum Arctic sea ice extent reached in 2020?",
+      "answer": "The annual minimum Arctic sea ice extent in 2020 was reached on 15 September 2020.\n\n[noaa_sea_ice_2020, page 2]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 5496,
+      "output_tokens": 37
+    },
+    {
+      "id": "text_03",
+      "type": "text",
+      "question": "What was the annual maximum sea ice extent reached on 5 March 2020?",
+      "answer": "The annual maximum sea ice extent reached on 5 March 2020 was 15.05 million km\u00b2. This was the 11th lowest in the satellite record and the highest since 2013 [noaa_sea_ice_2020, page 4].",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 6433,
+      "output_tokens": 57
+    },
+    {
+      "id": "text_04",
+      "type": "text",
+      "question": "In 1985, what percentage of the ice pack was very old ice, older than 4 years?",
+      "answer": "In 1985, 33% of the ice pack was very old ice, older than 4 years.\n\n[noaa_sea_ice_2020, page 5]  \n[noaa_sea_ice_2020, Figure 3, page 6]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 5492,
+      "output_tokens": 59
+    },
+    {
+      "id": "text_05",
+      "type": "text",
+      "question": "What was the average minimum sea ice extent for the period 2007-2020?",
+      "answer": "The average minimum sea ice extent for the period 2007-2020 was 4.44 million km\u00b2. [noaa_sea_ice_2020, page 5]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 5497,
+      "output_tokens": 40
+    },
+    {
+      "id": "text_06",
+      "type": "text",
+      "question": "What was the mean sea ice thickness from ICESat-2 in April 2020?",
+      "answer": "The mean sea ice thickness from ICESat-2 in April 2020 was 2.1 meters. The modal thickness was 1.9 meters. [noaa_sea_ice_2020, page 8]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 4701,
+      "output_tokens": 49
+    },
+    {
+      "id": "text_07",
+      "type": "text",
+      "question": "What range of sea ice thicknesses was measured in western Fram Strait in August and September 2020?",
+      "answer": "Sea ice thicknesses in western Fram Strait in August and September 2020 ranged from 1.06 to 3.43 meters, with a modal thickness of 1.6 meters. This was based on 34 direct measurements made on four ice stations, mainly on thicker second-year and multiyear ice floes. [noaa_sea_ice_2020, page 9]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 4377,
+      "output_tokens": 82
+    },
+    {
+      "id": "text_08",
+      "type": "text",
+      "question": "What percentage of U.S. children ever had Long COVID in 2022?",
+      "answer": "In 2022, 1.3% of U.S. children ever had Long COVID. \n\nThis percentage is broken down further by sex, with girls at 1.6% and boys at 0.9%. By age groups, children 12\u201317 years had a higher rate of 2.0%, compared to 1.0% for ages 0\u20135 years and 0.8% for ages 6\u201311 years. By race and Hispanic origin, Hispanic children had the highest rate at 1.9%.\n\n[cdc_long_covid_children_2022, page 1; page 2; page 4; Figure 2, page 2; Figure 3, page 3]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 4287,
+      "output_tokens": 151
+    },
+    {
+      "id": "text_09",
+      "type": "text",
+      "question": "How long must symptoms last after COVID-19 to count as Long COVID in this report?",
+      "answer": "Symptoms must last for at least 3 months after having COVID-19 to count as Long COVID in this report. \n\nThis is defined by a \"yes\" response to the survey question, \u201cDid you have any symptoms lasting 3 months or longer that you did not have prior to having COVID-19?\u201d among those who reported having COVID-19 via a positive test or doctor's diagnosis. \n\n[cdc_long_covid_children_2022, page 1 and page 4]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 3507,
+      "output_tokens": 98
+    },
+    {
+      "id": "text_10",
+      "type": "text",
+      "question": "How many children were in the 2022 National Health Interview Survey Sample Child interview?",
+      "answer": "The 2022 National Health Interview Survey Sample Child interview included 7,464 children. [cdc_long_covid_children_2022, page 4]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 3882,
+      "output_tokens": 33
+    },
+    {
+      "id": "text_11",
+      "type": "text",
+      "question": "As of December 2022, what percentage of children had antibodies indicating a previous COVID-19 infection?",
+      "answer": "As of December 2022, 91.9% of children had antibodies indicating a previous COVID-19 infection. Estimates by age group ranged from 86.8% in children ages 0\u20134 years to 93.5% in those ages 5\u201311 years, and 93.0% in those ages 12\u201317 years [cdc_long_covid_children_2022, page 4].",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 3916,
+      "output_tokens": 87
+    },
+    {
+      "id": "text_12",
+      "type": "text",
+      "question": "What percentage of Sample Child interviews were conducted at least partially by telephone in 2022?",
+      "answer": "In 2022, 56.1% of Sample Child interviews were conducted at least partially by telephone. [cdc_long_covid_children_2022, page 4]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 3507,
+      "output_tokens": 37
+    },
+    {
+      "id": "figure_01",
+      "type": "figure",
+      "question": "In the line chart of monthly sea ice extent, in which year does the September line reach its lowest point?",
+      "answer": "The September line in the monthly sea ice extent line chart reaches its lowest point in the year 2012.\n\nThis is shown by the red line on the chart in Figure 2, where the lowest percent difference occurs around 2012. The 2020 value is the second lowest, after 2012. \n\n[noaa_sea_ice_2020, Figure 2, page 4]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 5108,
+      "output_tokens": 84
+    },
+    {
+      "id": "figure_02",
+      "type": "figure",
+      "question": "In the line chart of monthly sea ice extent, is the September line above the March line around 1980? Start your answer with yes or no.",
+      "answer": "No. In the line chart of monthly sea ice extent, the September line (red) is below the March line (black) around 1980 [noaa_sea_ice_2020, Figure 2, page 4].",
+      "correct": false,
+      "cited_doc": true,
+      "input_tokens": 5209,
+      "output_tokens": 50
+    },
+    {
+      "id": "figure_03",
+      "type": "figure",
+      "question": "On the maps of March and September 2020 sea ice extent, what color marks the median ice edge for 1981-2010?",
+      "answer": "The median ice edge for 1981-2010 is marked in pink on the maps of March and September 2020 sea ice extent. [noaa_sea_ice_2020, Figure 1, page 3]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 5952,
+      "output_tokens": 49
+    },
+    {
+      "id": "figure_04",
+      "type": "figure",
+      "question": "In the chart of sea ice age percentages, which age group makes up the largest share of the ice in 2020?",
+      "answer": "The largest share of sea ice in 2020 is the 0-1 years old age group, making up about 60% of the ice in the Arctic Ocean region according to the sea ice age percentage chart for the week of 11-18 March 2020. \n\n[noaa_sea_ice_2020, Figure 3, page 6]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 5522,
+      "output_tokens": 77
+    },
+    {
+      "id": "figure_05",
+      "type": "figure",
+      "question": "On the sea ice age maps, what color does the legend use for ice that is 4 or more years old?",
+      "answer": "On the sea ice age maps, the legend uses the color red for ice that is 4 or more years old. [noaa_sea_ice_2020, Figure 3, page 6]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 5195,
+      "output_tokens": 44
+    },
+    {
+      "id": "figure_06",
+      "type": "figure",
+      "question": "On the map of sea ice thickness for April 2020, what is the highest value on the color scale, in meters?",
+      "answer": "The highest value on the color scale of the sea ice thickness map for April 2020 is 5 meters. \n\n[noaa_sea_ice_2020, Figure 5, page 8]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 5201,
+      "output_tokens": 44
+    },
+    {
+      "id": "figure_07",
+      "type": "figure",
+      "question": "On the map of sea ice thickness anomaly for April 2020, what is the largest value shown on the color scale, in meters?",
+      "answer": "The largest value shown on the color scale for the sea ice thickness anomaly map for April 2020 is 1.5 meters. \n\n[source: noaa_sea_ice_2020, Figure 5, page 8]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 4710,
+      "output_tokens": 49
+    },
+    {
+      "id": "figure_08",
+      "type": "figure",
+      "question": "In the chart of monthly sea ice thickness from ICESat-2, which winter's line is higher in April, winter 18-19 or winter 19-20?",
+      "answer": "In the chart of monthly sea ice thickness from ICESat-2, the winter 18-19 line is higher in April compared to the winter 19-20 line. The thickness for April 2020 (winter 19-20) is slightly lower than April 2019 (winter 18-19), with an April 2020 mean thickness of 2.1 m slightly below April 2019. This indicates the 18-19 winter ice thickness was higher in April than the 19-20 winter [noaa_sea_ice_2020, page 8].",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 4476,
+      "output_tokens": 123
+    },
+    {
+      "id": "figure_09",
+      "type": "figure",
+      "question": "In the Long COVID bar chart by sex, what color is the bar for boys?",
+      "answer": "The bar for boys in the Long COVID bar chart by sex is colored green. \n\n[cdc_long_covid_children_2022, Figure 1, page 1]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 3861,
+      "output_tokens": 36
+    },
+    {
+      "id": "figure_10",
+      "type": "figure",
+      "question": "In the Long COVID bar chart by age group, what is the highest value on the Percent axis?",
+      "answer": "The highest value on the Percent axis in the Long COVID bar chart by age group (Figure 2) is 3 percent. The chart shows percentages up to 3 on the vertical axis. The highest data value indicated is 2.0% for \"Ever Long COVID\" in the 12\u201317 years age group. \n\n(Source: [cdc_long_covid_children_2022, Figure 2, page 2])",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 3885,
+      "output_tokens": 88
+    },
+    {
+      "id": "figure_11",
+      "type": "figure",
+      "question": "In the Long COVID bar chart by race and Hispanic origin, what percentage of Hispanic children currently have Long COVID?",
+      "answer": "The percentage of Hispanic children who currently have Long COVID is 0.5% according to the Long COVID bar chart by race and Hispanic origin. \n\n[cdc_long_covid_children_2022, Figure 3, page 3]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 3933,
+      "output_tokens": 49
+    },
+    {
+      "id": "figure_12",
+      "type": "figure",
+      "question": "In the Long COVID bar chart by race and Hispanic origin, which group has an asterisk instead of a bar for current Long COVID?",
+      "answer": "The Asian non-Hispanic group has an asterisk instead of a bar for current Long COVID in the bar chart by race and Hispanic origin. This indicates that the estimate does not meet National Center for Health Statistics standards of reliability. [cdc_long_covid_children_2022, Figure 3, page 3]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 3938,
+      "output_tokens": 65
+    },
+    {
+      "id": "none_01",
+      "type": "none",
+      "question": "How many polar bears live in the Arctic?",
+      "answer": "I could not find this in the documents.",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 5817,
+      "output_tokens": 10
+    },
+    {
+      "id": "none_02",
+      "type": "none",
+      "question": "What percentage of adults in Canada have Long COVID?",
+      "answer": "I could not find this in the documents.",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 3905,
+      "output_tokens": 10
+    },
+    {
+      "id": "none_03",
+      "type": "none",
+      "question": "How much did Antarctic sea ice extent change in 2020?",
+      "answer": "I could not find this in the documents.",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 5669,
+      "output_tokens": 10
+    },
+    {
+      "id": "none_04",
+      "type": "none",
+      "question": "Who won the 2022 FIFA World Cup?",
+      "answer": "I could not find this in the documents.",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 4805,
+      "output_tokens": 10
+    }
+  ],
+  "text_only": [
+    {
+      "id": "text_01",
+      "type": "text",
+      "question": "What was the average monthly Arctic sea ice extent in September 2020?",
+      "answer": "The average monthly Arctic sea ice extent in September 2020 was 3.92 million km\u00b2. This was the second lowest monthly extent in the 42-year satellite record. The annual minimum extent on 15 September 2020 was 3.74 million km\u00b2, also the second lowest in the record. [noaa_sea_ice_2020, page 2]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 2061,
+      "output_tokens": 80
+    },
+    {
+      "id": "text_02",
+      "type": "text",
+      "question": "On what date was the annual minimum Arctic sea ice extent reached in 2020?",
+      "answer": "The annual minimum Arctic sea ice extent in 2020 was reached on 15 September 2020. [noaa_sea_ice_2020, page 5]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 2049,
+      "output_tokens": 37
+    },
+    {
+      "id": "text_03",
+      "type": "text",
+      "question": "What was the annual maximum sea ice extent reached on 5 March 2020?",
+      "answer": "The annual maximum sea ice extent reached on 5 March 2020 was 15.05 million km\u00b2, which was the 11th lowest in the satellite record and the highest since 2013. [noaa_sea_ice_2020, page 4]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 2986,
+      "output_tokens": 58
+    },
+    {
+      "id": "text_04",
+      "type": "text",
+      "question": "In 1985, what percentage of the ice pack was very old ice, older than 4 years?",
+      "answer": "In 1985, 33% of the Arctic ice pack was very old ice, older than 4 years. [noaa_sea_ice_2020, page 5]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 2089,
+      "output_tokens": 40
+    },
+    {
+      "id": "text_05",
+      "type": "text",
+      "question": "What was the average minimum sea ice extent for the period 2007-2020?",
+      "answer": "The average minimum sea ice extent for the period 2007-2020 was 4.44 million km\u00b2. [noaa_sea_ice_2020, page 5]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 2050,
+      "output_tokens": 40
+    },
+    {
+      "id": "text_06",
+      "type": "text",
+      "question": "What was the mean sea ice thickness from ICESat-2 in April 2020?",
+      "answer": "The mean sea ice thickness from ICESat-2 in April 2020 was 2.1 meters (modal thickness 1.9 meters). \n\n[noaa_sea_ice_2020, page 8]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 1906,
+      "output_tokens": 48
+    },
+    {
+      "id": "text_07",
+      "type": "text",
+      "question": "What range of sea ice thicknesses was measured in western Fram Strait in August and September 2020?",
+      "answer": "Sea ice thicknesses in western Fram Strait in August and September 2020 ranged from 1.06 to 3.43 meters, with a modal thickness of 1.6 meters. This was based on 34 direct measurements mainly on thicker second year and multiyear ice floes. [noaa_sea_ice_2020, page 9]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 1583,
+      "output_tokens": 76
+    },
+    {
+      "id": "text_08",
+      "type": "text",
+      "question": "What percentage of U.S. children ever had Long COVID in 2022?",
+      "answer": "In 2022, 1.3% of U.S. children ever had Long COVID. Girls (1.6%) were more likely than boys (0.9%) to have ever had Long COVID. Children ages 12\u201317 years (2.0%) were more likely than younger children to ever have Long COVID. Hispanic children (1.9%) were more likely than Asian non-Hispanic (0.2%) and Black non-Hispanic children (0.6%) to ever have Long COVID [cdc_long_covid_children_2022, pages 1, 2, 3, 4].",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 2208,
+      "output_tokens": 129
+    },
+    {
+      "id": "text_09",
+      "type": "text",
+      "question": "How long must symptoms last after COVID-19 to count as Long COVID in this report?",
+      "answer": "Symptoms must last at least 3 months after having COVID-19 to count as Long COVID in this report. This is based on a \"yes\" response to the survey question asking if the person had any symptoms lasting 3 months or longer that they did not have prior to having COVID-19. [cdc_long_covid_children_2022, page 1 and page 4]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 1805,
+      "output_tokens": 79
+    },
+    {
+      "id": "text_10",
+      "type": "text",
+      "question": "How many children were in the 2022 National Health Interview Survey Sample Child interview?",
+      "answer": "The 2022 National Health Interview Survey Sample Child interview included 7,464 children. [cdc_long_covid_children_2022, page 4]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 1804,
+      "output_tokens": 33
+    },
+    {
+      "id": "text_11",
+      "type": "text",
+      "question": "As of December 2022, what percentage of children had antibodies indicating a previous COVID-19 infection?",
+      "answer": "As of December 2022, 91.9% of children had antibodies indicating a previous COVID-19 infection. Estimates by age group ranged from 86.8% in children ages 0\u20134 years to 93.5% in those ages 5\u201311 years, and 93.0% in those ages 12\u201317 years. Estimates were similar by sex: 92.3% in girls and 91.5% in boys. [cdc_long_covid_children_2022, page 4]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 2213,
+      "output_tokens": 110
+    },
+    {
+      "id": "text_12",
+      "type": "text",
+      "question": "What percentage of Sample Child interviews were conducted at least partially by telephone in 2022?",
+      "answer": "In 2022, 56.1% of Sample Child interviews were conducted at least partially by telephone. [cdc_long_covid_children_2022, page 4]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 1805,
+      "output_tokens": 37
+    },
+    {
+      "id": "figure_01",
+      "type": "figure",
+      "question": "In the line chart of monthly sea ice extent, in which year does the September line reach its lowest point?",
+      "answer": "The September line reaches its lowest point in the year 2012, which shows the lowest minimum extent on the line chart of monthly sea ice extent from 1979 to 2020. The line for 2020 is the second lowest.\n\n[noaa_sea_ice_2020, Figure 1 on page 1]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 1991,
+      "output_tokens": 69
+    },
+    {
+      "id": "figure_02",
+      "type": "figure",
+      "question": "In the line chart of monthly sea ice extent, is the September line above the March line around 1980? Start your answer with yes or no.",
+      "answer": "No, in the line chart of monthly sea ice extent around 1980, the September line is below the March line. March is the typical month of maximum extent and September is the annual minimum, so the March values are higher than September values during that period [noaa_sea_ice_2020, Figure 2].",
+      "correct": false,
+      "cited_doc": true,
+      "input_tokens": 2091,
+      "output_tokens": 68
+    },
+    {
+      "id": "figure_03",
+      "type": "figure",
+      "question": "On the maps of March and September 2020 sea ice extent, what color marks the median ice edge for 1981-2010?",
+      "answer": "The median ice edge for 1981-2010 is marked in yellow on the maps of March and September 2020 sea ice extent. Other colors are white for 2020 ice extent and pink for 2019 ice extent. [noaa_sea_ice_2020, Figure 1]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 2506,
+      "output_tokens": 64
+    },
+    {
+      "id": "figure_04",
+      "type": "figure",
+      "question": "In the chart of sea ice age percentages, which age group makes up the largest share of the ice in 2020?",
+      "answer": "The largest share of the ice in 2020 is the youngest ice group, less than 1 year old, which makes up the majority since the oldest ice (>4 years) is only 4.4% and the 3-4 year old ice decreased to 3.7%. The chart shows that the youngest ice category dominates the ice age composition in 2020. \n\n[noaa_sea_ice_2020, page 5, Figure 3]",
+      "correct": false,
+      "cited_doc": true,
+      "input_tokens": 2076,
+      "output_tokens": 98
+    },
+    {
+      "id": "figure_05",
+      "type": "figure",
+      "question": "On the sea ice age maps, what color does the legend use for ice that is 4 or more years old?",
+      "answer": "On the sea ice age maps, the legend uses a dark purple color for ice that is 4 or more years old. \n\nThis can be seen in Figure 3, where the age category \"> 4 years\" is shown with a dark purple shade in the legend. [noaa_sea_ice_2020, Figure 3]",
+      "correct": false,
+      "cited_doc": true,
+      "input_tokens": 1749,
+      "output_tokens": 71
+    },
+    {
+      "id": "figure_06",
+      "type": "figure",
+      "question": "On the map of sea ice thickness for April 2020, what is the highest value on the color scale, in meters?",
+      "answer": "The highest value on the color scale of the sea ice thickness map for April 2020 is 4 meters. \n\n[noaa_sea_ice_2020, Figure 5]",
+      "correct": false,
+      "cited_doc": true,
+      "input_tokens": 2406,
+      "output_tokens": 40
+    },
+    {
+      "id": "figure_07",
+      "type": "figure",
+      "question": "On the map of sea ice thickness anomaly for April 2020, what is the largest value shown on the color scale, in meters?",
+      "answer": "The largest value shown on the color scale of the sea ice thickness anomaly for April 2020 is 1.5 meters. \n\nThis is observed in the color bar on the map showing the sea ice thickness anomaly on page 8, where the scale goes from -1.5 (dark purple) to +1.5 (orange) meters. \n\n[noaa_sea_ice_2020, page 8, Figure 5]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 1915,
+      "output_tokens": 92
+    },
+    {
+      "id": "figure_08",
+      "type": "figure",
+      "question": "In the chart of monthly sea ice thickness from ICESat-2, which winter's line is higher in April, winter 18-19 or winter 19-20?",
+      "answer": "The winter 18-19 line is higher in April compared to winter 19-20 in the ICESat-2 monthly sea ice thickness chart. April 2020 (winter 19-20) has a mean thickness of 2.1 m, which is slightly lower than April 2019 (winter 18-19). Thus, winter 18-19 is higher in April than winter 19-20. [noaa_sea_ice_2020, page 8]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 1681,
+      "output_tokens": 103
+    },
+    {
+      "id": "figure_09",
+      "type": "figure",
+      "question": "In the Long COVID bar chart by sex, what color is the bar for boys?",
+      "answer": "The bar color for boys in the Long COVID bar chart by sex is blue. [cdc_long_covid_children_2022, page 2, Figure 1]",
+      "correct": false,
+      "cited_doc": true,
+      "input_tokens": 2209,
+      "output_tokens": 35
+    },
+    {
+      "id": "figure_10",
+      "type": "figure",
+      "question": "In the Long COVID bar chart by age group, what is the highest value on the Percent axis?",
+      "answer": "The highest value on the Percent axis in the Long COVID bar chart by age group is 2.5%. This is based on the axis labels visible in the figure.  \n\n[cdc_long_covid_children_2022, Figure 2]",
+      "correct": false,
+      "cited_doc": true,
+      "input_tokens": 1807,
+      "output_tokens": 50
+    },
+    {
+      "id": "figure_11",
+      "type": "figure",
+      "question": "In the Long COVID bar chart by race and Hispanic origin, what percentage of Hispanic children currently have Long COVID?",
+      "answer": "The percentage of Hispanic children who currently have Long COVID is 1.9% according to the data and text provided. However, the exact percentage of Hispanic children who currently have Long COVID is not explicitly stated; the 1.9% refers to those who ever had Long COVID. The exact percentage for currently having Long COVID is not significant between Black and Hispanic children and is not explicitly given for Hispanic children alone. The text notes that Black children currently have Long COVID at 0.1% and White children at 0.6%, but the difference between Black and Hispanic children was not significant, implying Hispanic children currently have a percentage close to these values but no exact figure is reported. \n\nThus, the document does not provide a definitive percentage for Hispanic children who currently have Long COVID. \n\n[cdc_long_covid_children_2022, page 3]",
+      "correct": false,
+      "cited_doc": true,
+      "input_tokens": 1855,
+      "output_tokens": 174
+    },
+    {
+      "id": "figure_12",
+      "type": "figure",
+      "question": "In the Long COVID bar chart by race and Hispanic origin, which group has an asterisk instead of a bar for current Long COVID?",
+      "answer": "The group that has an asterisk instead of a bar for current Long COVID in the bar chart by race and Hispanic origin is Asian non-Hispanic children. The asterisk indicates that the estimate does not meet National Center for Health Statistics standards of reliability. [cdc_long_covid_children_2022, page 3]",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 1860,
+      "output_tokens": 66
+    },
+    {
+      "id": "none_01",
+      "type": "none",
+      "question": "How many polar bears live in the Arctic?",
+      "answer": "I could not find this in the documents.",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 2371,
+      "output_tokens": 10
+    },
+    {
+      "id": "none_02",
+      "type": "none",
+      "question": "What percentage of adults in Canada have Long COVID?",
+      "answer": "I could not find this in the documents.",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 2202,
+      "output_tokens": 10
+    },
+    {
+      "id": "none_03",
+      "type": "none",
+      "question": "How much did Antarctic sea ice extent change in 2020?",
+      "answer": "I could not find this in the documents.",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 2552,
+      "output_tokens": 10
+    },
+    {
+      "id": "none_04",
+      "type": "none",
+      "question": "Who won the 2022 FIFA World Cup?",
+      "answer": "I could not find this in the documents.",
+      "correct": true,
+      "cited_doc": true,
+      "input_tokens": 2204,
+      "output_tokens": 10
+    }
+  ]
+}
