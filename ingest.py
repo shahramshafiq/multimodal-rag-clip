@@ -4,7 +4,7 @@ import sys
 
 from multimodal_rag.chunking import chunk_blocks
 from multimodal_rag.config import settings, setup_logging
-from multimodal_rag.embeddings import CLIP_SPECIAL_TOKENS, ClipEmbedder
+from multimodal_rag.embeddings import ClipEmbedder
 from multimodal_rag.extract import extract_pdf
 from multimodal_rag.store import save_index
 
