@@ -6,6 +6,7 @@ have no caption, so they are left out without any special rule.
 """
 import logging
 import re
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -130,6 +131,10 @@ def extract_pdf(pdf_path, settings):
                 if rect in captions or inside_figure or len(text) < settings.min_block_chars:
                     continue
                 texts.append(TextBlock(doc_name, page_no, text))
+
+    # the same text on several pages is a running header, not content
+    pages_with_text = Counter(block.text for block in texts)
+    texts = [block for block in texts if pages_with_text[block.text] == 1]
 
     log.info("%s: %d text blocks, %d figures", doc_name, len(texts), len(figures))
     return texts, figures
