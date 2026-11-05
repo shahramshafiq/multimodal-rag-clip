@@ -62,11 +62,10 @@ def _figure_parts(page, settings):
     return [r for r in rects if r.width >= size and r.height >= size and r.get_area() < 0.9 * page_area]
 
 
-def _figure_box(caption_rect, parts, blocks, settings):
+def _figure_box(caption_rect, parts, settings):
     """Start at the part nearest the caption, then add the parts close to it. None when nothing is near."""
-    nearby = [p for p in parts if not (p & caption_rect).is_empty is False or _gap(p, caption_rect) >= 0]
     # a figure sits straight above or below its caption
-    nearby = [p for p in nearby if min(p.x1, caption_rect.x1) > max(p.x0, caption_rect.x0)]
+    nearby = [p for p in parts if min(p.x1, caption_rect.x1) > max(p.x0, caption_rect.x0)]
     nearby.sort(key=lambda p: _gap(p, caption_rect))
     if not nearby or _gap(nearby[0], caption_rect) > settings.figure_caption_gap:
         return None
@@ -113,7 +112,7 @@ def extract_pdf(pdf_path, settings):
                 if not match:
                     continue
                 captions.append(rect)
-                box = _figure_box(rect, parts, blocks, settings)
+                box = _figure_box(rect, parts, settings)
                 if box is None:
                     log.warning("%s page %d: no figure found for the caption %r", doc_name, page_no, text[:50])
                     continue
