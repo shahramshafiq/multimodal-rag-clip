@@ -1,6 +1,7 @@
 """Reads every setting from .env, and from .env.example for anything .env does not mention."""
 import logging
 import os
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -76,6 +77,7 @@ settings = Settings(
 
 
 def setup_logging():
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # the Windows console cannot print every PDF character
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-7s [%(name)s] %(message)s", datefmt="%H:%M:%S")
     for noisy in ("httpx", "httpcore", "openai", "transformers", "huggingface_hub", "urllib3"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
