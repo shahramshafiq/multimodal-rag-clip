@@ -48,7 +48,7 @@ def test_chart_labels_captions_headers_and_references_are_not_in_the_text(extrac
     assert "Total Boys Girls" not in all_text  # a label inside a chart
     assert "Figure 1. Percentage" not in all_text  # a caption is kept with its figure
     assert "NCHS Data Brief" not in all_text  # a header repeated on every page
-    assert "Cavalieri" not in all_text  # the first reference
+    assert "Comiso, J.C." not in all_text  # an entry in the reference list
 
 
 class FakeEmbedder:
