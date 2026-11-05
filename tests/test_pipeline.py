@@ -60,6 +60,7 @@ def make_index():
     return Index(
         chunks=[{"chunk_id": "a", "doc": "d", "page": 1, "text": "a"}, {"chunk_id": "b", "doc": "d", "page": 2, "text": "b"}],
         figures=[{"figure_id": "image_match"}, {"figure_id": "caption_match"}],
+        pages={"d|1": "page one", "d|2": "page two"},
         text_vectors=np.array([[0.1, 0.9], [0.9, 0.1]], dtype=np.float32),
         image_vectors=np.array([[0.3, 0.9], [0.1, 0.9]], dtype=np.float32),
         caption_vectors=np.array([[0.0, 1.0], [0.8, 0.2]], dtype=np.float32),
@@ -74,6 +75,14 @@ def test_figures_get_their_own_list_even_when_text_scores_are_higher():
     found = retrieve("question", make_index(), FakeEmbedder(), 1, 1, use_captions=False)
     assert found.chunks[0]["chunk_id"] == "b"
     assert found.figures[0]["figure_id"] == "image_match"
+
+
+def test_chunks_search_but_the_model_gets_each_whole_page_once():
+    index = make_index()
+    index.chunks[0]["page"] = 2  # both chunks now come from one page
+    found = retrieve("question", index, FakeEmbedder(), 2, 1, use_captions=False)
+    assert found.pages == [{"doc": "d", "page": 2, "text": "page two"}]
+    assert "page two" in build_content("question", found, "high")[1]["text"]
 
 
 def test_a_caption_can_lift_a_figure():
