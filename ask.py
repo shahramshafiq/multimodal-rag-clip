@@ -29,6 +29,7 @@ def main():
         print("Figures found:")
         for figure in found.figures:
             print(f"  {figure['score']:.3f}  {figure['figure_id']} (page {figure['page']})")
+        print("Pages sent to the model:", ", ".join(f"{page['doc']} p{page['page']}" for page in found.pages))
 
         if not args.no_llm:
             result = Answerer(settings).answer(args.question, found)
