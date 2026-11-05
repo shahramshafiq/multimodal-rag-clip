@@ -21,10 +21,16 @@ def term_found(term, text):
     return re.search(rf"(?<![\w.])(?:{options})(?!\w)", text, re.IGNORECASE) is not None
 
 
+def without_sources(answer):
+    """Drop "[doc, Figure 5, page 8]" and "Figure 5", so the number in a source never counts as the answer."""
+    return re.sub(r"\[[^\]]*\]|\b(?:Figure|Fig\.|page)\s*\d+", " ", answer, flags=re.IGNORECASE)
+
+
 def answer_is_correct(item, answer, not_found_sentence):
     if item["type"] == "none":
         return not_found_sentence.lower() in answer.lower()
-    return all(term_found(term, answer) for term in item["must_include"])
+    claim = without_sources(answer)
+    return all(term_found(term, claim) for term in item["must_include"])
 
 
 def retrieval_hit_rank(item, found):
