@@ -29,8 +29,9 @@ def report_retrieval(golden, index, embedder):
             print(f"  right figure in top {k}: {hits}/{total}")
     print("\nText search:")
     for k in TEXT_KS:
-        hits, total = hit_rate(results["image and caption"], "text", k)
-        print(f"  right page in top {k}: {hits}/{total}")
+        pages, total = hit_rate(results["image and caption"], "text", k)
+        chunks, _ = hit_rate(results["image and caption"], "text", k, field="answer_chunk_rank")
+        print(f"  top {k}: right page {pages}/{total}, chunk holding the answer {chunks}/{total}")
     return results
 
 
