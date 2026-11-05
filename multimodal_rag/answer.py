@@ -1,6 +1,7 @@
 """Step 6: send the question, the text chunks and the figure pictures to a vision model and get the answer."""
 import base64
 import logging
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -42,10 +43,11 @@ def build_content(question, retrieved, detail):
 
 class Answerer:
     def __init__(self, settings):
-        if not (settings_key := __import__("os").getenv("OPENAI_API_KEY", "").strip()):
+        api_key = os.getenv("OPENAI_API_KEY", "").strip()
+        if not api_key:
             raise RuntimeError("OPENAI_API_KEY is empty. Add it to .env in the project folder.")
         self.settings = settings
-        self.client = OpenAI(api_key=settings_key, timeout=settings.openai_timeout_seconds,
+        self.client = OpenAI(api_key=api_key, timeout=settings.openai_timeout_seconds,
                              max_retries=settings.openai_max_retries)
 
     def answer(self, question, retrieved):
