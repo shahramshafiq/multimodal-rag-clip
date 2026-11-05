@@ -17,16 +17,21 @@ ITEMS_FILE = "items.json"
 class Index:
     chunks: list  # dicts: chunk_id, doc, page, text
     figures: list  # dicts: figure_id, doc, page, number, caption, image_path
+    pages: dict  # "doc|page" -> the full text of that page
     text_vectors: np.ndarray
     image_vectors: np.ndarray
     caption_vectors: np.ndarray
 
 
-def save_index(index_dir, chunks, figures, text_vectors, image_vectors, caption_vectors):
+def page_key(doc, page):
+    return f"{doc}|{page}"
+
+
+def save_index(index_dir, chunks, figures, pages, text_vectors, image_vectors, caption_vectors):
     index_dir = Path(index_dir)
     index_dir.mkdir(parents=True, exist_ok=True)
     np.savez(index_dir / VECTORS_FILE, text=text_vectors, image=image_vectors, caption=caption_vectors)
-    items = {"chunks": [asdict(chunk) for chunk in chunks], "figures": [asdict(figure) for figure in figures]}
+    items = {"chunks": [asdict(chunk) for chunk in chunks], "figures": [asdict(figure) for figure in figures], "pages": pages}
     (index_dir / ITEMS_FILE).write_text(json.dumps(items, indent=2), encoding="utf-8")
 
 
@@ -36,7 +41,7 @@ def load_index(index_dir):
         raise FileNotFoundError(f"No index in {index_dir}. Run: python ingest.py")
     items = json.loads((index_dir / ITEMS_FILE).read_text(encoding="utf-8"))
     vectors = np.load(index_dir / VECTORS_FILE)
-    return Index(items["chunks"], items["figures"], vectors["text"], vectors["image"], vectors["caption"])
+    return Index(items["chunks"], items["figures"], items["pages"], vectors["text"], vectors["image"], vectors["caption"])
 
 
 def top_matches(scores, k):
