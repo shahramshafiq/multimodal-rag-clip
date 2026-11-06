@@ -83,5 +83,6 @@ settings = Settings(
 def setup_logging():
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # the Windows console cannot print every PDF character
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-7s [%(name)s] %(message)s", datefmt="%H:%M:%S")
-    for noisy in ("httpx", "httpx2", "httpcore", "openai", "huggingface_hub", "urllib3"):
+    for noisy in ("httpx", "httpx2", "httpcore", "openai", "urllib3"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
+    logging.getLogger("huggingface_hub").setLevel(logging.ERROR)  # it warns on every run that no token is set
