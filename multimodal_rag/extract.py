@@ -32,6 +32,7 @@ class Figure:
     number: int
     caption: str
     image_path: str
+    notes: str = ""  # the footnotes printed under the figure
 
 
 def _clean(text):
@@ -122,13 +123,18 @@ def extract_pdf(pdf_path, settings):
                 boxes.append(box)
                 figures.append(Figure(f"{doc_name}_fig{number}", doc_name, page_no, number, text, str(path)))
 
+            # a footnote explains a figure, for example what an asterisk means, so it stays with that figure
+            footnotes = [text for _, text in blocks if "SOURCE:" in text] if boxes else []
+            if footnotes:
+                figures[-1].notes = " ".join(footnotes)
+
             for rect, text in blocks:
                 if text.lower() in settings.stop_headings:
                     stopped = True
                 if stopped:
                     break
                 inside_figure = any(box.intersects(rect) and (box & rect).get_area() > 0.5 * rect.get_area() for box in boxes)
-                if rect in captions or inside_figure or len(text) < settings.min_block_chars:
+                if rect in captions or inside_figure or text in footnotes or len(text) < settings.min_block_chars:
                     continue
                 texts.append(TextBlock(doc_name, page_no, text))
 
