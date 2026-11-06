@@ -62,8 +62,8 @@ tests/                  18 tests, no key and no CLIP download needed
 Python 3.12. In PowerShell:
 
 ```bash
-git clone https://github.com/shahramshafiq/multimodal-rag-clip.git
-cd multimodal-rag-clip
+git clone https://github.com/shahramshafiq/multimodal-rag-pdf.git
+cd multimodal-rag-pdf
 py -3.12 -m venv .venv
 .venv\Scripts\activate
 pip install torch --index-url https://download.pytorch.org/whl/cpu
