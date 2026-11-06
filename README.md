@@ -1,24 +1,30 @@
-# Multimodal RAG with CLIP
+# Multimodal RAG on PDF Reports
 
-Ask questions about two short PDF reports and get answers from their text and from their charts and maps. CLIP searches text and images in one shared vector space, and a vision model reads what was found.
+Ask questions about two short PDF reports and get answers from their text and from their charts and maps, with the source named. Search finds the right pages and figures, and a vision model reads the real pictures.
 
 ## How it works
 
 ```text
-PDF --> text blocks --> chunks of at most 70 tokens --> CLIP text vectors --+
-    |                                                                       +--> index
-    +-> figures, cropped through their captions ------> CLIP image vectors -+
+ONCE, FOR EACH PDF
+PDF --> text blocks --> chunks --> text embeddings ----------------------+
+    |                                                                    +--> index
+    +-> figures cropped through their captions                           |
+           +--> a vision model describes each figure --> text embeddings +
+           +--> CLIP image vectors (kept for comparison) ----------------+
 
-question --> CLIP text vector --> top 8 chunks --> their whole pages -+
-                              +-> top 2 figures (pictures) -----------+--> vision model --> answer + source
+FOR EACH QUESTION
+question --> text embedding --> top 6 chunks --> their whole pages --+
+                             +-> top 2 figure descriptions           +--> vision model --> answer + source
+                                    --> the real pictures -----------+
 ```
 
-Four design choices, each for a reason:
+Five design choices, each for a reason:
 
-1. **Figures are found through captions, not through the images stored in the PDF.** The CDC charts are drawn as vector shapes, so a plain image extract would miss them. Logos and QR codes have no caption, so they are left out with no special rule.
-2. **Text and figures are ranked in two separate lists.** In CLIP, text-to-text scores run higher than text-to-image scores, so one shared list would push the figures out.
-3. **Chunks are for searching, whole pages are for reading.** CLIP reads at most 77 tokens, so chunks are small and lose their context. The model gets the full page of each chunk found.
-4. **CLIP finds a chart and the vision model reads it.** CLIP cannot reliably read values on a chart. It only needs to find the right picture.
+1. **Figures are found through captions, not through the images stored in the PDF.** The CDC charts appear to be drawn as vector shapes, so a plain image extract could miss them. Logos and QR codes have no caption, so they are left out with no special rule.
+2. **Figures are searched through a text description, and the answer reads the real picture.** A vision model describes each figure once. The description is only used to find the figure, so a mistake in it can never become a wrong number in an answer.
+3. **Text and figures are ranked in two separate lists,** because their scores are not on the same scale.
+4. **Chunks are for searching, whole pages are for reading.** A chunk is often cut off from its context, so the model gets the full page of each chunk found.
+5. **The model must not fill gaps.** It may not use another year's value or outside knowledge, and it must say when the asked form is not given. The code also checks that every source an answer cites was really sent to the model.
 
 ## Documents
 
@@ -36,17 +42,19 @@ evaluate.py             Scores the pipeline against the golden dataset
 multimodal_rag/
   config.py             Reads every setting from .env and .env.example
   extract.py            Text blocks and captioned figures from a PDF
-  chunking.py           Chunks that fit CLIP's token limit
-  embeddings.py         CLIP text and image vectors
+  chunking.py           Cuts the text into chunks
+  embeddings.py         CLIP image vectors and OpenAI text embeddings
+  describe.py           One search description per figure, saved after the first run
   store.py              Saves, loads and searches the vectors with NumPy
-  retrieve.py           Separate text and figure search, whole pages
-  answer.py             Sends pages and pictures to the vision model
+  retrieve.py           Separate text and figure search, whole pages, rank fusion
+  answer.py             Sends pages and pictures to the vision model, checks sources
   evaluation.py         Retrieval and answer scoring
 data/pdfs/              The two reports
 data/figures/           The cropped figures
-eval/golden.json        28 questions with expected sources and answers
+data/figure_descriptions.json   The saved figure descriptions
+eval/golden.json        71 questions with expected sources and answers
 eval/results/           Saved results
-tests/                  12 tests, no key and no CLIP download needed
+tests/                  18 tests, no key and no CLIP download needed
 ```
 
 ## Setup and run
@@ -66,57 +74,78 @@ Put your key in `.env`: `OPENAI_API_KEY=...`. All other settings, including mode
 
 ```bash
 python ingest.py
-python ask.py "In the line chart of monthly sea ice extent, in which year does the September line reach its lowest point?"
+python ask.py "What is the percent difference in March 2010 and in September 2010?"
 python ask.py "bar chart of Long COVID by race" --no-llm
 python evaluate.py
 python evaluate.py --answers
+python evaluate.py --answers --compare-text-only
 python -m pytest
 ```
 
-`ingest.py`, `--no-llm`, `evaluate.py` and the tests run locally and cost nothing. The first run downloads CLIP. `ask.py` without `--no-llm` and `evaluate.py --answers` make paid model calls.
+Each question stands alone: `ask.py` does not remember the question before it. A question costs about half a cent. `--no-llm` and `evaluate.py` only use the embedding model, which costs a tiny fraction of that. The tests cost nothing. The first `ingest.py` run downloads CLIP and pays once for the figure descriptions.
 
 ## Evaluation
 
-The golden dataset has 28 questions: 12 answered by text, 12 answered only by looking at a figure, and 4 the documents cannot answer.
+The golden dataset has 71 questions in three sets. Every chart value was measured from the chart's pixels, so the true answers do not depend on any model.
 
-**Answers.** The same pipeline was run twice, once with figures removed:
+- **Easy (28):** worded almost like the captions and the report.
+- **Natural (27):** worded the way a person asks, including 5 traps where the documents do not hold the value and a model could easily invent it.
+- **Holdout (16):** added after every setting was chosen, and never tuned on.
 
-| Question type | Multimodal RAG | Text-only RAG |
+**Answers, same pipeline with and without figures:**
+
+| Set and question type | With figures | Figures removed |
 |---|---|---|
-| Text | 12/12 | 12/12 |
-| Figure | 11/12 | 5/12 |
-| Not in the documents | 4/4 | 4/4 |
-| Total | 27/28 | 21/28 |
+| Easy: text | 12/12 | 12/12 |
+| Easy: figure | 12/12 | 2/12 |
+| Easy: not in the documents | 4/4 | 4/4 |
+| Natural: text | 8/8 | 8/8 |
+| Natural: figure | 13/14 | 2/14 |
+| Natural: trap | 5/5 | 5/5 |
+| Holdout: text | 4/4 | 4/4 |
+| Holdout: figure | 10/10 | 2/10 |
+| Holdout: not in the documents | 2/2 | 2/2 |
+| **Total** | **70/71** | **41/71** |
 
-The score checks for expected terms in the answer, with sources removed first. Reading the answers by hand shows two things the score cannot:
+No answer cited a source that was not sent. All 36 figure questions were run twice, and no question changed between right and wrong. Reading the answers by hand, chart values are good estimates, not exact: one run read 2010 first-year ice as 65% and the next as 70%, against a measured value of about 65%.
 
-- The 5 text-only figure scores are too generous. One says the color is yellow and only mentions pink in passing, so it is wrong. Of the other 4, only `figure_08` can be worked out from the text. The rest are guesses, because the model never saw a figure.
-- In the multimodal run, `figure_02` is a real error: it says September is below March around 1980, and the chart shows the opposite. `figure_04` names the right group but says "about 60%" where the chart shows about 70%. `figure_08` was answered from the text, because its figure was not retrieved.
+The one miss is `natural_fig_06`: the right figure was not retrieved, so the model said the exact amount is not given. It invented nothing.
 
-**Retrieval**
+**The first version on the same questions** (CLIP for everything, `gpt-4.1-mini`) scored natural figure 7/14 and traps 2/5 on a stricter trap check, invented sources, and used a 2020 value for a 2010 question.
 
-| Figure search | Top 1 | Top 2 | Top 3 |
-|---|---|---|---|
-| Image only (used) | 8/12 | 11/12 | 11/12 |
-| Image and caption | 6/12 | 9/12 | 10/12 |
+**Figure search, right figure found on natural questions:**
 
-| Text search | Top 1 | Top 2 | Top 4 | Top 8 |
-|---|---|---|---|---|
-| Right page | 8/12 | 9/12 | 10/12 | 12/12 |
-| Chunk holding the answer | 7/12 | 7/12 | 8/12 | 9/12 |
+| Search by | Top 1 | Top 2 |
+|---|---|---|
+| CLIP on the image | 4/14 | 8/14 |
+| Figure description (used) | 11/14 | 13/14 |
+| Both, with rank fusion | 5/14 | 13/14 |
 
-What the measurements changed:
+On the holdout set the same three scored 5/10, 9/10 and 7/10 in the top 1.
 
-- Adding captions to figure search looked like a good idea and made it worse, so it is off.
-- With chunks sent to the model, text scored 9/12: the chunk holding the answer ranked as low as 40th of 121. Sending whole pages raised it to 12/12 with CLIP unchanged.
+**Vision model, the 20 hardest questions with the same retrieval:**
+
+| Model | Correct |
+|---|---|
+| `gpt-5.4-mini` (used) | 19/20 |
+| `gpt-5.4` | 18/20 |
+| `gpt-4.1-mini` | 14/20 |
+
+## What the measurements changed
+
+- The first golden questions were too close to the captions, so they scored well while real questions failed. Natural questions and a holdout set were added for that reason.
+- CLIP lost to text search over figure descriptions, so CLIP is no longer used to answer questions. It is still built into the index, and `FIGURE_SEARCH=both` or `image` brings it back.
+- A dedicated text embedding model replaced CLIP for text. The right page in the top 1 went from 2/8 to 6/8 on natural text questions.
+- The bigger model was not the better one, so the smaller one is used.
+- The scorer itself was wrong several times: the 5 in "Figure 5" passed as an answer, and so did any answer naming the right word in a wrong claim. So answers are also read by hand.
 
 ## Limitations
 
-- CLIP is weak at finding exact facts in text. A dedicated text embedding model would very likely search text better, and the two-list design would allow that change.
+- 71 questions on 2 documents is small, and one person wrote them, so these numbers are not a general claim. Only the 16 holdout questions were never tuned on.
+- Values read from a chart are estimates, so a small error is allowed when scoring them.
 - A figure without a caption is not found.
-- A figure with several panels gets one vector, so one panel is hard to find. `figure_08` missed for this reason.
-- 28 questions on 2 documents is small, and the settings were chosen on the same questions they are scored on, so these numbers are not a general claim.
-- The model is `gpt-4.1-mini`, which OpenAI's model page marks as deprecated. It worked in these runs and can be changed with `OPENAI_MODEL`.
+- The saved descriptions were written by `gpt-4.1-mini`, before the answer model was changed. They have only been used for search.
+- The first question in a terminal is slow, about 17 seconds in one test, partly from loading the libraries.
 
 ## Author
 
