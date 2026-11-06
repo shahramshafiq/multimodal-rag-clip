@@ -20,14 +20,12 @@ def _text(name):
     return value.strip()
 
 
-def _flag(name):
-    return _text(name).lower() in ("true", "1", "yes")
-
-
 @dataclass(frozen=True)
 class Settings:
     clip_model: str
+    text_embedding_model: str
     openai_model: str
+    openai_reasoning_effort: str  # empty for models that do not take it
     openai_timeout_seconds: float
     openai_max_retries: int
     image_detail: str
@@ -35,6 +33,7 @@ class Settings:
     pdf_dir: Path
     index_dir: Path
     figure_dir: Path
+    descriptions_file: Path
     golden_file: Path
     results_dir: Path
     stop_headings: tuple
@@ -46,13 +45,16 @@ class Settings:
     chunk_max_tokens: int
     top_k_text: int
     top_k_figures: int
-    use_figure_captions: bool
+    figure_search: str  # image, description or both
+    rrf_k: int
     not_found_sentence: str
 
 
 settings = Settings(
     clip_model=_text("CLIP_MODEL"),
+    text_embedding_model=_text("TEXT_EMBEDDING_MODEL"),
     openai_model=_text("OPENAI_MODEL"),
+    openai_reasoning_effort=os.getenv("OPENAI_REASONING_EFFORT", "").strip(),
     openai_timeout_seconds=float(_text("OPENAI_TIMEOUT_SECONDS")),
     openai_max_retries=int(_text("OPENAI_MAX_RETRIES")),
     image_detail=_text("IMAGE_DETAIL"),
@@ -60,6 +62,7 @@ settings = Settings(
     pdf_dir=ROOT / _text("PDF_DIR"),
     index_dir=ROOT / _text("INDEX_DIR"),
     figure_dir=ROOT / _text("FIGURE_DIR"),
+    descriptions_file=ROOT / _text("DESCRIPTIONS_FILE"),
     golden_file=ROOT / _text("GOLDEN_FILE"),
     results_dir=ROOT / _text("RESULTS_DIR"),
     stop_headings=tuple(part.strip().lower() for part in _text("STOP_HEADINGS").split(",")),
@@ -71,7 +74,8 @@ settings = Settings(
     chunk_max_tokens=int(_text("CHUNK_MAX_TOKENS")),
     top_k_text=int(_text("TOP_K_TEXT")),
     top_k_figures=int(_text("TOP_K_FIGURES")),
-    use_figure_captions=_flag("USE_FIGURE_CAPTIONS"),
+    figure_search=_text("FIGURE_SEARCH"),
+    rrf_k=int(_text("RRF_K")),
     not_found_sentence=_text("NOT_FOUND_SENTENCE"),
 )
 
