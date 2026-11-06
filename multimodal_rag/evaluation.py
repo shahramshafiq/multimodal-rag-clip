@@ -2,6 +2,7 @@
 import json
 import logging
 import re
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
 
 from .answer import unknown_sources
@@ -42,6 +43,8 @@ def answer_is_correct(item, answer, not_found_sentence):
     claim = without_sources(answer)
     if "must_not_match" in item and re.search(item["must_not_match"], claim, re.IGNORECASE):
         return False  # for example a value taken from the wrong year, or a number made up for a trap question
+    if "must_match" in item and not re.search(item["must_match"], claim, re.IGNORECASE):
+        return False  # for example a trap answer that never says the value is not given
     return (all(term_found(term, claim) for term in item.get("must_include", []))
             and all(number_found(value, error, claim) for value, error in item.get("numbers", [])))
 
@@ -94,28 +97,29 @@ def hit_rate(rows, kind, k, field="rank", only_set=None):
 
 def evaluate_answers(golden, index, clip, text_embedder, answerer, settings, use_figures):
     """Answer every question. With use_figures=False the same pipeline runs as a text-only RAG, for comparison."""
-    rows = []
+    questions = []
     for item in golden:
         found = retrieve(item["question"], index, clip, text_embedder, settings)
-        if not use_figures:
-            found = replace(found, figures=[])
+        questions.append((item, found if use_figures else replace(found, figures=[])))
+
+    def answer_one(question):
+        item, found = question
+        row = {"id": item["id"], "type": item["type"], "set": question_set(item), "question": item["question"]}
         try:
             result = answerer.answer(item["question"], found)
         except RuntimeError as exc:
             log.error("%s failed: %s", item["id"], exc)
-            rows.append({"id": item["id"], "type": item["type"], "set": question_set(item), "question": item["question"],
-                         "answer": None, "correct": False, "cited_doc": False, "unknown_sources": [], "input_tokens": 0, "output_tokens": 0})
-            continue
-        rows.append({
-            "id": item["id"],
-            "type": item["type"],
-            "set": question_set(item),
-            "question": item["question"],
+            return {**row, "answer": None, "correct": False, "cited_doc": False, "unknown_sources": [],
+                    "input_tokens": 0, "output_tokens": 0}
+        return {
+            **row,
             "answer": result.text,
             "correct": answer_is_correct(item, result.text, settings.not_found_sentence),
             "cited_doc": item["type"] in ("none", "trap") or item["doc"] in result.text,
             "unknown_sources": unknown_sources(result.text, found),
             "input_tokens": result.input_tokens,
             "output_tokens": result.output_tokens,
-        })
-    return rows
+        }
+
+    with ThreadPoolExecutor(settings.evaluation_workers) as pool:
+        return list(pool.map(answer_one, questions))
