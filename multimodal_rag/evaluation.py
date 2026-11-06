@@ -4,6 +4,7 @@ import logging
 import re
 from dataclasses import replace
 
+from .answer import unknown_sources
 from .retrieve import retrieve
 
 log = logging.getLogger("evaluation")
@@ -72,13 +73,13 @@ def answer_chunk_rank(item, found):
     return None
 
 
-def evaluate_retrieval(golden, index, embedder, max_k_text, max_k_figures, use_captions):
+def evaluate_retrieval(golden, index, clip, text_embedder, settings, max_k_text, max_k_figures, figure_mode):
     """Each question's rank of the expected source, searched with the largest k so smaller k can be read from it."""
     rows = []
     for item in golden:
         if item["type"] not in ("text", "figure"):
             continue
-        found = retrieve(item["question"], index, embedder, max_k_text, max_k_figures, use_captions)
+        found = retrieve(item["question"], index, clip, text_embedder, settings, max_k_text, max_k_figures, figure_mode)
         rows.append({"id": item["id"], "type": item["type"], "set": question_set(item), "rank": retrieval_hit_rank(item, found),
                      "answer_chunk_rank": answer_chunk_rank(item, found)})
     return rows
@@ -91,12 +92,11 @@ def hit_rate(rows, kind, k, field="rank", only_set=None):
     return len(hits), len(selected)
 
 
-def evaluate_answers(golden, index, embedder, answerer, settings, use_figures):
+def evaluate_answers(golden, index, clip, text_embedder, answerer, settings, use_figures):
     """Answer every question. With use_figures=False the same pipeline runs as a text-only RAG, for comparison."""
     rows = []
     for item in golden:
-        found = retrieve(item["question"], index, embedder, settings.top_k_text, settings.top_k_figures,
-                         settings.use_figure_captions)
+        found = retrieve(item["question"], index, clip, text_embedder, settings)
         if not use_figures:
             found = replace(found, figures=[])
         try:
@@ -104,7 +104,7 @@ def evaluate_answers(golden, index, embedder, answerer, settings, use_figures):
         except RuntimeError as exc:
             log.error("%s failed: %s", item["id"], exc)
             rows.append({"id": item["id"], "type": item["type"], "set": question_set(item), "question": item["question"],
-                         "answer": None, "correct": False, "cited_doc": False, "input_tokens": 0, "output_tokens": 0})
+                         "answer": None, "correct": False, "cited_doc": False, "unknown_sources": [], "input_tokens": 0, "output_tokens": 0})
             continue
         rows.append({
             "id": item["id"],
@@ -114,6 +114,7 @@ def evaluate_answers(golden, index, embedder, answerer, settings, use_figures):
             "answer": result.text,
             "correct": answer_is_correct(item, result.text, settings.not_found_sentence),
             "cited_doc": item["type"] in ("none", "trap") or item["doc"] in result.text,
+            "unknown_sources": unknown_sources(result.text, found),
             "input_tokens": result.input_tokens,
             "output_tokens": result.output_tokens,
         })
