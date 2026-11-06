@@ -50,7 +50,10 @@ def answer_is_correct(item, answer, not_found_sentence):
 
 
 def question_set(item):
-    """easy: worded almost like the captions and the report. natural: worded the way a person asks."""
+    """easy: worded almost like the captions and the report. natural: worded the way a person asks.
+    holdout: added after every setting was chosen, and never tuned on."""
+    if item["id"].startswith("holdout_"):
+        return "holdout"
     return "natural" if item["id"].startswith(("natural_", "trap_")) else "easy"
 
 
