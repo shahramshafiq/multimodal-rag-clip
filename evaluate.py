@@ -1,6 +1,7 @@
 """Evaluate against the golden dataset.
-  python evaluate.py             retrieval only, free
-  python evaluate.py --answers   also answers every question twice (with and without figures), uses paid model calls
+  python evaluate.py             retrieval only
+  python evaluate.py --answers   also answers every question (paid model calls)
+  python evaluate.py --answers --compare-text-only   also repeats every question with figures removed (costs more)
 """
 import argparse
 import json
@@ -14,7 +15,8 @@ from multimodal_rag.store import load_index
 
 TEXT_KS = (1, 2, 4, 8)
 FIGURE_KS = (1, 2, 3)
-KINDS = ("text", "figure", "none")
+GROUPS = (("easy", "text"), ("easy", "figure"), ("easy", "none"),
+          ("natural", "text"), ("natural", "figure"), ("natural", "trap"))
 
 
 def report_retrieval(golden, index, embedder):
@@ -24,23 +26,27 @@ def report_retrieval(golden, index, embedder):
         name = "image and caption" if use_captions else "image only"
         results[name] = rows
         print(f"\nFigure search by {name}:")
-        for k in FIGURE_KS:
-            hits, total = hit_rate(rows, "figure", k)
-            print(f"  right figure in top {k}: {hits}/{total}")
-    print("\nText search:")
-    for k in TEXT_KS:
-        pages, total = hit_rate(results["image and caption"], "text", k)
-        chunks, _ = hit_rate(results["image and caption"], "text", k, field="answer_chunk_rank")
-        print(f"  top {k}: right page {pages}/{total}, chunk holding the answer {chunks}/{total}")
+        for only_set in ("easy", "natural"):
+            scores = [hit_rate(rows, "figure", k, only_set=only_set) for k in FIGURE_KS]
+            print(f"  {only_set:8}" + "".join(f"  top {k}: {hits}/{total}" for k, (hits, total) in zip(FIGURE_KS, scores)))
+    print("\nText search, right page:")
+    rows = results["image only"]
+    for only_set in ("easy", "natural"):
+        scores = [hit_rate(rows, "text", k, only_set=only_set) for k in TEXT_KS]
+        print(f"  {only_set:8}" + "".join(f"  top {k}: {hits}/{total}" for k, (hits, total) in zip(TEXT_KS, scores)))
+    print("Text search, chunk holding the answer:")
+    for only_set in ("easy", "natural"):
+        scores = [hit_rate(rows, "text", k, field="answer_chunk_rank", only_set=only_set) for k in TEXT_KS]
+        print(f"  {only_set:8}" + "".join(f"  top {k}: {hits}/{total}" for k, (hits, total) in zip(TEXT_KS, scores)))
     return results
 
 
 def report_answers(rows, name):
     print(f"\n{name}:")
-    for kind in KINDS:
-        selected = [row for row in rows if row["type"] == kind]
-        correct = sum(row["correct"] for row in selected)
-        print(f"  {kind:7} {correct}/{len(selected)} correct")
+    for only_set, kind in GROUPS:
+        selected = [row for row in rows if row["set"] == only_set and row["type"] == kind]
+        print(f"  {only_set:8} {kind:7} {sum(row['correct'] for row in selected)}/{len(selected)} correct")
+    print(f"  total {sum(row['correct'] for row in rows)}/{len(rows)}")
     print(f"  source named in {sum(row['cited_doc'] for row in rows)}/{len(rows)} answers")
     print(f"  tokens: {sum(r['input_tokens'] for r in rows)} in, {sum(r['output_tokens'] for r in rows)} out")
     for row in rows:
@@ -51,6 +57,7 @@ def report_answers(rows, name):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--answers", action="store_true", help="also score answers (paid model calls)")
+    parser.add_argument("--compare-text-only", action="store_true", help="also answer with figures removed")
     args = parser.parse_args()
     setup_logging()
 
@@ -63,9 +70,10 @@ def main():
         if args.answers:
             answerer = Answerer(settings)
             results["multimodal"] = evaluate_answers(golden, index, embedder, answerer, settings, use_figures=True)
-            results["text_only"] = evaluate_answers(golden, index, embedder, answerer, settings, use_figures=False)
             report_answers(results["multimodal"], "Multimodal RAG (text and figures)")
-            report_answers(results["text_only"], "Text-only RAG (same pipeline, figures removed)")
+            if args.compare_text_only:
+                results["text_only"] = evaluate_answers(golden, index, embedder, answerer, settings, use_figures=False)
+                report_answers(results["text_only"], "Text-only RAG (same pipeline, figures removed)")
     except (FileNotFoundError, RuntimeError, ValueError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
