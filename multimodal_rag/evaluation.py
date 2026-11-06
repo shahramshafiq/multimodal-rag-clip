@@ -26,11 +26,28 @@ def without_sources(answer):
     return re.sub(r"\[[^\]]*\]|\b(?:Figure|Fig\.|page)\s*\d+", " ", answer, flags=re.IGNORECASE)
 
 
+def numbers_in(text):
+    """Every number in the text, as a positive value: "-24%" and "24 percent below" both give 24."""
+    return [float(number.replace(",", "")) for number in re.findall(r"\d[\d,]*(?:\.\d+)?", text)]
+
+
+def number_found(expected, allowed_error, text):
+    return any(abs(number - expected) <= allowed_error for number in numbers_in(text))
+
+
 def answer_is_correct(item, answer, not_found_sentence):
     if item["type"] == "none":
         return not_found_sentence.lower() in answer.lower()
     claim = without_sources(answer)
-    return all(term_found(term, claim) for term in item["must_include"])
+    if "must_not_match" in item and re.search(item["must_not_match"], claim, re.IGNORECASE):
+        return False  # for example a value taken from the wrong year, or a number made up for a trap question
+    return (all(term_found(term, claim) for term in item.get("must_include", []))
+            and all(number_found(value, error, claim) for value, error in item.get("numbers", [])))
+
+
+def question_set(item):
+    """easy: worded almost like the captions and the report. natural: worded the way a person asks."""
+    return "natural" if item["id"].startswith(("natural_", "trap_")) else "easy"
 
 
 def retrieval_hit_rank(item, found):
@@ -50,7 +67,7 @@ def answer_chunk_rank(item, found):
     """A stricter check for text questions: where is the chunk that really holds the answer?"""
     if item["type"] == "text":
         for rank, chunk in enumerate(found.chunks, start=1):
-            if all(term_found(term, chunk["text"]) for term in item["must_include"]):
+            if all(term_found(term, chunk["text"]) for term in item.get("must_include", [])):
                 return rank
     return None
 
@@ -59,17 +76,17 @@ def evaluate_retrieval(golden, index, embedder, max_k_text, max_k_figures, use_c
     """Each question's rank of the expected source, searched with the largest k so smaller k can be read from it."""
     rows = []
     for item in golden:
-        if item["type"] == "none":
+        if item["type"] not in ("text", "figure"):
             continue
         found = retrieve(item["question"], index, embedder, max_k_text, max_k_figures, use_captions)
-        rows.append({"id": item["id"], "type": item["type"], "rank": retrieval_hit_rank(item, found),
+        rows.append({"id": item["id"], "type": item["type"], "set": question_set(item), "rank": retrieval_hit_rank(item, found),
                      "answer_chunk_rank": answer_chunk_rank(item, found)})
     return rows
 
 
-def hit_rate(rows, kind, k, field="rank"):
+def hit_rate(rows, kind, k, field="rank", only_set=None):
     """Share of questions of this kind whose expected source is in the top k."""
-    selected = [row for row in rows if row["type"] == kind]
+    selected = [row for row in rows if row["type"] == kind and only_set in (None, row.get("set"))]
     hits = [row for row in selected if row[field] is not None and row[field] <= k]
     return len(hits), len(selected)
 
@@ -86,16 +103,17 @@ def evaluate_answers(golden, index, embedder, answerer, settings, use_figures):
             result = answerer.answer(item["question"], found)
         except RuntimeError as exc:
             log.error("%s failed: %s", item["id"], exc)
-            rows.append({"id": item["id"], "type": item["type"], "question": item["question"], "answer": None,
-                         "correct": False, "cited_doc": False, "input_tokens": 0, "output_tokens": 0})
+            rows.append({"id": item["id"], "type": item["type"], "set": question_set(item), "question": item["question"],
+                         "answer": None, "correct": False, "cited_doc": False, "input_tokens": 0, "output_tokens": 0})
             continue
         rows.append({
             "id": item["id"],
             "type": item["type"],
+            "set": question_set(item),
             "question": item["question"],
             "answer": result.text,
             "correct": answer_is_correct(item, result.text, settings.not_found_sentence),
-            "cited_doc": item["type"] == "none" or item["doc"] in result.text,
+            "cited_doc": item["type"] in ("none", "trap") or item["doc"] in result.text,
             "input_tokens": result.input_tokens,
             "output_tokens": result.output_tokens,
         })
