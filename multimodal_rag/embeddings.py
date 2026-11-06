@@ -1,8 +1,16 @@
-"""Step 3: CLIP turns text and images into vectors in one shared space. It runs locally and costs nothing."""
+"""Step 3: turn text and images into vectors.
+
+Two models, each for what it does well:
+- CLIP puts images and text in one shared space, so a text question can find a picture. It runs locally for free.
+- A text embedding model finds exact facts in text far better than CLIP does, and it has no 77 token limit.
+"""
 import logging
+import os
 
 import numpy as np
 import torch
+from huggingface_hub.utils import logging as hub_logging
+from openai import OpenAI, OpenAIError
 from PIL import Image
 from transformers import CLIPModel, CLIPProcessor
 from transformers.utils import logging as transformers_logging
@@ -11,16 +19,25 @@ log = logging.getLogger("embeddings")
 
 # count_tokens measures long sentences on purpose, so the "longer than 77" warning is only noise here
 transformers_logging.set_verbosity_error()
+transformers_logging.disable_progress_bar()
+hub_logging.set_verbosity_error()
 
 
 class ClipEmbedder:
     def __init__(self, model_name):
         log.info("loading %s", model_name)
         try:
-            self.model = CLIPModel.from_pretrained(model_name).eval()
-            self.processor = CLIPProcessor.from_pretrained(model_name)
-        except Exception as exc:
-            raise RuntimeError(f"Could not load the CLIP model {model_name}: {exc}") from exc
+            self.model, self.processor = self._load(model_name, local_only=True)  # no network call once it is downloaded
+        except OSError:
+            try:
+                self.model, self.processor = self._load(model_name, local_only=False)
+            except Exception as exc:
+                raise RuntimeError(f"Could not load the CLIP model {model_name}: {exc}") from exc
+
+    @staticmethod
+    def _load(model_name, local_only):
+        model = CLIPModel.from_pretrained(model_name, local_files_only=local_only).eval()
+        return model, CLIPProcessor.from_pretrained(model_name, local_files_only=local_only)
 
     def count_tokens(self, text):
         return len(self.processor.tokenizer(text, truncation=False)["input_ids"])
@@ -45,3 +62,24 @@ class ClipEmbedder:
                 images.append(image.convert("RGB"))
         inputs = self.processor(images=images, return_tensors="pt")
         return self._unit_vectors(self.model.get_image_features(**inputs))
+
+
+class TextEmbedder:
+    """Text search vectors from the OpenAI embeddings API."""
+
+    def __init__(self, settings):
+        api_key = os.getenv("OPENAI_API_KEY", "").strip()
+        if not api_key:
+            raise RuntimeError("OPENAI_API_KEY is empty. Add it to .env in the project folder.")
+        self.model_name = settings.text_embedding_model
+        self.client = OpenAI(api_key=api_key, timeout=settings.openai_timeout_seconds,
+                             max_retries=settings.openai_max_retries)
+
+    def embed_texts(self, texts):
+        try:
+            response = self.client.embeddings.create(model=self.model_name, input=list(texts))
+        except OpenAIError as exc:
+            log.error("the embedding call failed: %s", type(exc).__name__)
+            raise RuntimeError(f"The text could not be embedded: {exc}") from exc
+        vectors = np.array([item.embedding for item in response.data], dtype=np.float32)
+        return vectors / np.linalg.norm(vectors, axis=1, keepdims=True)
