@@ -135,6 +135,13 @@ def test_a_value_from_the_wrong_year_fails_the_answer():
     assert answer_is_correct(item, "About -24%", "none")
 
 
+def test_a_trap_answer_must_say_the_value_is_not_given():
+    item = {"type": "trap", "must_match": "not given", "must_not_match": "about \\d+ million"}
+    assert answer_is_correct(item, "The value for 2010 is not given. The report only has 2020: 3.92 million.", "none")
+    assert not answer_is_correct(item, "It was 3.6 million.", "none")
+    assert not answer_is_correct(item, "It is not given, but about 15 million.", "none")
+
+
 def test_a_source_that_was_not_sent_is_caught():
     found = Retrieved(chunks=[], figures=[{"doc": "d", "number": 1, "page": 3}], pages=[{"doc": "d", "page": 2, "text": ""}])
     assert unknown_sources("Answer [d, Figure 1] and [d, page 2]", found) == []
