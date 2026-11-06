@@ -1,11 +1,12 @@
 """Ask one question: python ask.py "What was the sea ice extent in September 2020?"
-Add --no-llm to see what retrieval found without calling the paid model."""
+Add --no-llm to see what retrieval found without calling the answer model.
+Each question stands alone: the program does not remember the question before it."""
 import argparse
 import sys
 
-from multimodal_rag.answer import Answerer
+from multimodal_rag.answer import Answerer, unknown_sources
 from multimodal_rag.config import settings, setup_logging
-from multimodal_rag.embeddings import ClipEmbedder
+from multimodal_rag.embeddings import ClipEmbedder, TextEmbedder
 from multimodal_rag.retrieve import retrieve
 from multimodal_rag.store import load_index
 
@@ -19,9 +20,8 @@ def main():
 
     try:
         index = load_index(settings.index_dir)
-        embedder = ClipEmbedder(settings.clip_model)
-        found = retrieve(args.question, index, embedder, settings.top_k_text, settings.top_k_figures,
-                         settings.use_figure_captions)
+        clip = ClipEmbedder(settings.clip_model)
+        found = retrieve(args.question, index, clip, TextEmbedder(settings), settings)
 
         print("\nText found:")
         for chunk in found.chunks:
@@ -34,6 +34,8 @@ def main():
         if not args.no_llm:
             result = Answerer(settings).answer(args.question, found)
             print(f"\nAnswer: {result.text}")
+            for source in unknown_sources(result.text, found):
+                print(f"WARNING: the answer cites [{source}], which was not in the context. Do not trust this answer.")
             print(f"Tokens: {result.input_tokens} in, {result.output_tokens} out")
     except (FileNotFoundError, RuntimeError, ValueError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
