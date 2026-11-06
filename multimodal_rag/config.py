@@ -26,6 +26,7 @@ class Settings:
     text_embedding_model: str
     openai_model: str
     openai_reasoning_effort: str  # empty for models that do not take it
+    evaluation_workers: int
     openai_timeout_seconds: float
     openai_max_retries: int
     image_detail: str
@@ -55,6 +56,7 @@ settings = Settings(
     text_embedding_model=_text("TEXT_EMBEDDING_MODEL"),
     openai_model=_text("OPENAI_MODEL"),
     openai_reasoning_effort=os.getenv("OPENAI_REASONING_EFFORT", "").strip(),
+    evaluation_workers=int(_text("EVALUATION_WORKERS")),
     openai_timeout_seconds=float(_text("OPENAI_TIMEOUT_SECONDS")),
     openai_max_retries=int(_text("OPENAI_MAX_RETRIES")),
     image_detail=_text("IMAGE_DETAIL"),
