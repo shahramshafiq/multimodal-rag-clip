@@ -20,7 +20,7 @@ def main():
 
     try:
         index = load_index(settings.index_dir)
-        clip = ClipEmbedder(settings.clip_model)
+        clip = None if settings.figure_search == "description" else ClipEmbedder(settings.clip_model)
         found = retrieve(args.question, index, clip, TextEmbedder(settings), settings)
 
         print("\nText found:")
