@@ -9,7 +9,7 @@ import sys
 
 from multimodal_rag.answer import Answerer
 from multimodal_rag.config import settings, setup_logging
-from multimodal_rag.embeddings import ClipEmbedder
+from multimodal_rag.embeddings import ClipEmbedder, TextEmbedder
 from multimodal_rag.evaluation import evaluate_answers, evaluate_retrieval, hit_rate, load_golden
 from multimodal_rag.store import load_index
 
@@ -19,18 +19,17 @@ GROUPS = (("easy", "text"), ("easy", "figure"), ("easy", "none"),
           ("natural", "text"), ("natural", "figure"), ("natural", "trap"))
 
 
-def report_retrieval(golden, index, embedder):
+def report_retrieval(golden, index, clip, text_embedder):
     results = {}
-    for use_captions in (False, True):
-        rows = evaluate_retrieval(golden, index, embedder, max(TEXT_KS), max(FIGURE_KS), use_captions)
-        name = "image and caption" if use_captions else "image only"
+    for name in ("image", "description", "both"):
+        rows = evaluate_retrieval(golden, index, clip, text_embedder, settings, max(TEXT_KS), max(FIGURE_KS), name)
         results[name] = rows
         print(f"\nFigure search by {name}:")
         for only_set in ("easy", "natural"):
             scores = [hit_rate(rows, "figure", k, only_set=only_set) for k in FIGURE_KS]
             print(f"  {only_set:8}" + "".join(f"  top {k}: {hits}/{total}" for k, (hits, total) in zip(FIGURE_KS, scores)))
     print("\nText search, right page:")
-    rows = results["image only"]
+    rows = results["both"]
     for only_set in ("easy", "natural"):
         scores = [hit_rate(rows, "text", k, only_set=only_set) for k in TEXT_KS]
         print(f"  {only_set:8}" + "".join(f"  top {k}: {hits}/{total}" for k, (hits, total) in zip(TEXT_KS, scores)))
@@ -48,6 +47,7 @@ def report_answers(rows, name):
         print(f"  {only_set:8} {kind:7} {sum(row['correct'] for row in selected)}/{len(selected)} correct")
     print(f"  total {sum(row['correct'] for row in rows)}/{len(rows)}")
     print(f"  source named in {sum(row['cited_doc'] for row in rows)}/{len(rows)} answers")
+    print(f"  answers citing a source that was not sent: {sum(bool(row['unknown_sources']) for row in rows)}")
     print(f"  tokens: {sum(r['input_tokens'] for r in rows)} in, {sum(r['output_tokens'] for r in rows)} out")
     for row in rows:
         if not row["correct"]:
@@ -64,15 +64,16 @@ def main():
     try:
         golden = load_golden(settings.golden_file)
         index = load_index(settings.index_dir)
-        embedder = ClipEmbedder(settings.clip_model)
-        results = {"retrieval": report_retrieval(golden, index, embedder)}
+        clip = ClipEmbedder(settings.clip_model)
+        text_embedder = TextEmbedder(settings)
+        results = {"retrieval": report_retrieval(golden, index, clip, text_embedder)}
 
         if args.answers:
             answerer = Answerer(settings)
-            results["multimodal"] = evaluate_answers(golden, index, embedder, answerer, settings, use_figures=True)
+            results["multimodal"] = evaluate_answers(golden, index, clip, text_embedder, answerer, settings, use_figures=True)
             report_answers(results["multimodal"], "Multimodal RAG (text and figures)")
             if args.compare_text_only:
-                results["text_only"] = evaluate_answers(golden, index, embedder, answerer, settings, use_figures=False)
+                results["text_only"] = evaluate_answers(golden, index, clip, text_embedder, answerer, settings, use_figures=False)
                 report_answers(results["text_only"], "Text-only RAG (same pipeline, figures removed)")
     except (FileNotFoundError, RuntimeError, ValueError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
