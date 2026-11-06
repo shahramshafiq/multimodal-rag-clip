@@ -42,13 +42,13 @@ def fuse_ranks(score_lists, k):
     return fused
 
 
-def figure_scores(query_clip, query_text, index, mode, rrf_k):
-    by_image = index.image_vectors @ query_clip
+def figure_scores(question, query_text, index, clip, mode, rrf_k):
     by_description = index.description_vectors @ query_text
+    if mode == "description":
+        return by_description  # CLIP is not needed, so it does not have to be loaded
+    by_image = index.image_vectors @ clip.embed_texts([question])[0]
     if mode == "image":
         return by_image
-    if mode == "description":
-        return by_description
     return fuse_ranks([by_image, by_description], rrf_k)
 
 
@@ -56,12 +56,11 @@ def retrieve(question, index, clip, text_embedder, settings, top_k_text=None, to
     top_k_text = top_k_text or settings.top_k_text
     top_k_figures = top_k_figures or settings.top_k_figures
     query_text = text_embedder.embed_texts([question])[0]
-    query_clip = clip.embed_texts([question])[0]
 
     text_scores = index.text_vectors @ query_text
     chunks = [{**index.chunks[i], "score": score} for i, score in top_matches(text_scores, top_k_text)]
 
-    scores = figure_scores(query_clip, query_text, index, figure_mode or settings.figure_search, settings.rrf_k)
+    scores = figure_scores(question, query_text, index, clip, figure_mode or settings.figure_search, settings.rrf_k)
     figures = [{**index.figures[i], "score": score} for i, score in top_matches(scores, top_k_figures)]
 
     return Retrieved(chunks, figures, _pages_of(chunks, index))
