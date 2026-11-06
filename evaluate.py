@@ -16,7 +16,9 @@ from multimodal_rag.store import load_index
 TEXT_KS = (1, 2, 4, 8)
 FIGURE_KS = (1, 2, 3)
 GROUPS = (("easy", "text"), ("easy", "figure"), ("easy", "none"),
-          ("natural", "text"), ("natural", "figure"), ("natural", "trap"))
+          ("natural", "text"), ("natural", "figure"), ("natural", "trap"),
+          ("holdout", "text"), ("holdout", "figure"), ("holdout", "none"))
+SETS = ("easy", "natural", "holdout")
 
 
 def report_retrieval(golden, index, clip, text_embedder):
@@ -25,16 +27,16 @@ def report_retrieval(golden, index, clip, text_embedder):
         rows = evaluate_retrieval(golden, index, clip, text_embedder, settings, max(TEXT_KS), max(FIGURE_KS), name)
         results[name] = rows
         print(f"\nFigure search by {name}:")
-        for only_set in ("easy", "natural"):
+        for only_set in SETS:
             scores = [hit_rate(rows, "figure", k, only_set=only_set) for k in FIGURE_KS]
             print(f"  {only_set:8}" + "".join(f"  top {k}: {hits}/{total}" for k, (hits, total) in zip(FIGURE_KS, scores)))
     print("\nText search, right page:")
     rows = results["both"]
-    for only_set in ("easy", "natural"):
+    for only_set in SETS:
         scores = [hit_rate(rows, "text", k, only_set=only_set) for k in TEXT_KS]
         print(f"  {only_set:8}" + "".join(f"  top {k}: {hits}/{total}" for k, (hits, total) in zip(TEXT_KS, scores)))
     print("Text search, chunk holding the answer:")
-    for only_set in ("easy", "natural"):
+    for only_set in SETS:
         scores = [hit_rate(rows, "text", k, field="answer_chunk_rank", only_set=only_set) for k in TEXT_KS]
         print(f"  {only_set:8}" + "".join(f"  top {k}: {hits}/{total}" for k, (hits, total) in zip(TEXT_KS, scores)))
     return results
